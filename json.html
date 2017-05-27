@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    var myJsonp = function(url, params, callback){
+       // ?start=0&count=20
+        //参数拼接
+        var querystring = '?';
+        for(var key in params){
+            querystring += key + '=' + params[key] + '&';
+        }
+        url += querystring;
+
+
+        var mycallback = 'callback_' + Math.random().toString().substr(4); // callback_1234 callback_318974871  callback_1413
+       // url =  url + 'callback=mycallback'; //http://api.douban.com/v2/movie/in_theaters?start=0&count=20&callback=mycallback
+        console.log(url);
+        url = url + 'callback=' + mycallback;
+
+        var p = 'name';
+        var obj = {
+           /* name:'xiaoming'*/
+        }
+        //obj[p]
+        window[mycallback] = callback;// callback就每次都不一样
+       // window.mycallback = callback; //设置callback函数
+        // 1.第一次调用   window.mycallback = 第一次的回调函数
+        // 2.第二次调用   window.mycallback = 第二次的回调函数
+        // 3.第三次调用   window.mycallback = 第三次的回调函数
+
+        //封装jsonp的功能
+        //1. 动态的创建script标签
+        var script = document.createElement('script');
+
+        //2. 设置script的src属性
+
+        script.src = url;
+
+        // 添加script到body上
+        document.body.appendChild(script);
+
+    }
+
+    var url = 'http://api.douban.com/v2/movie/in_theaters';
+   // var url = 'http://api.douban.com/v2/movie/in_theaters?start=0&count=20?callback=mycallback';
+    // url可以传递参数
+    myJsonp(url, { start:0, count:20 },  function(result){ // url， params( {start:0, count:20)}
+        console.log('请求数据到了1', result)
+    });
+    myJsonp(url, { start:0, count:20 },  function(result){ // url， params( {start:0, count:20)}
+        console.log('请求数据到了2', result)
+    })
+    myJsonp(url, { start:0, count:20 },  function(result){ // url， params( {start:0, count:20)}
+        console.log('请求数据到了3', result)
+    })
+
+</script>
+</html>
